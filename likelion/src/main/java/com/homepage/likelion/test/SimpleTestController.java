@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/simpleText")
 public class SimpleTestController {
     /*
-    GET http:/localhost:8080/api/simpleText/succes
+    GET http:/localhost:8080/api/simpleText/success
     • HttpStatus : 200(OK)
     • ResponseBody(plaintext):안녕
      */
-    @GetMapping("/succes")
+    @GetMapping("/success")
     public String simpleTextSuccess() {
         return "안녕";
     }
