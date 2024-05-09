@@ -16,5 +16,6 @@ public class SignUpDto {
     private String userId;
     @Email(message = "email 형식을 맞춰주세요.")
     private String email;
+    @NotEmpty(message = "password는 필수 값입니다.")
     private String password;
 }
