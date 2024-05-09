@@ -1,5 +1,6 @@
-package com.homepage.likelion.test;
+package com.homepage.likelion.test.tmp.controller;
 
+import com.homepage.likelion.test.tmp.dto.SignUpDto;
 import com.homepage.likelion.util.response.CustomApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/tmp/api/user")
 public class UserTestController {
     //POST http://localhost:8080/api/user/signup
     @PostMapping("/signup")
