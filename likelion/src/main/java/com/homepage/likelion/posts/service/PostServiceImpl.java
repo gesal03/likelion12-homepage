@@ -2,6 +2,7 @@ package com.homepage.likelion.posts.service;
 
 import com.homepage.likelion.domain.Post;
 import com.homepage.likelion.posts.dto.PostCreateDto;
+import com.homepage.likelion.posts.dto.PostUpdateDto;
 import com.homepage.likelion.posts.repository.PostRepository;
 import com.homepage.likelion.util.response.CustomApiResponse;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +40,26 @@ public class PostServiceImpl implements PostService {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseBody);
+    }
 
+    @Override
+    public ResponseEntity<CustomApiResponse<?>> updatePost(PostUpdateDto.Req req, Long postId) {
+        // Post 객체 가져오기
+        Optional<Post> postOptional = postRepository.findById(postId);
+        // post 객체 수정
+        Post post = postOptional.get();
+        post.changeContent(req.getContent());
+        post.changeTitle(req.getTitle());
+        post.changeUserName(req.getPostedUserName());
+        postRepository.flush(); // 변경 사항 즉시 저장
 
-
+        // data 생성
+        PostUpdateDto.UpdatePost data = new PostUpdateDto.UpdatePost(post.getUpdatedAt().atStartOfDay());
+        // ResponseBody 생성
+        CustomApiResponse<PostUpdateDto.UpdatePost> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글이 수정되었습니다");
+        // ResponseEntity 반환
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseBody);
     }
 }

@@ -1,8 +1,10 @@
 package com.homepage.likelion.posts.controller;
 
 import com.homepage.likelion.posts.dto.PostCreateDto;
+import com.homepage.likelion.posts.dto.PostUpdateDto;
 import com.homepage.likelion.posts.service.PostService;
 import com.homepage.likelion.util.response.CustomApiResponse;
+import jakarta.persistence.PostUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,5 +18,12 @@ public class PostController {
     @PostMapping
     public ResponseEntity<CustomApiResponse<?>> createPost(@Valid @RequestBody PostCreateDto.Req req) {
         return postService.createPost(req);
+    }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<CustomApiResponse<?>> updatePost(
+            @RequestBody PostUpdateDto.Req req,
+            @PathVariable("postId") Long postId) {
+        return postService.updatePost(req, postId);
     }
 }

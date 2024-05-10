@@ -24,5 +24,8 @@ public class Post extends BaseEntity {
     @Column(name="POSTES_PASSWORD")
     private String password;
 
+    public void changeTitle(String title) {this.title = title;}
+    public void changeContent(String content) {this.content = content;}
+    public void changeUserName(String postedUserName) {this.postedUserName = postedUserName;}
 
 }
