@@ -2,6 +2,7 @@ package com.homepage.likelion.posts.service;
 
 import com.homepage.likelion.domain.Post;
 import com.homepage.likelion.posts.dto.PostCreateDto;
+import com.homepage.likelion.posts.dto.PostListDto;
 import com.homepage.likelion.posts.dto.PostUpdateDto;
 import com.homepage.likelion.posts.repository.PostRepository;
 import com.homepage.likelion.util.response.CustomApiResponse;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,8 +68,18 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<CustomApiResponse<?>> getAllPost() {
-        List<Post> data = postRepository.findAll();
-        CustomApiResponse<List<Post>> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글 전체 조회 완료되었습니다");
+        List<Post> posts = postRepository.findAll();
+        List<PostListDto.PostResponse> postResponses = new ArrayList<>();
+        for (Post post : posts) {
+            postResponses.add(PostListDto.PostResponse.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .Content(post.getContent())
+                    .postedUserName(post.getPostedUserName())
+                    .updatedAt(post.getUpdatedAt().atStartOfDay())
+                    .build());
+        }
+        CustomApiResponse<List<PostListDto.PostResponse>> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), postResponses, "게시글 전체 조회 완료되었습니다");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseBody);
@@ -75,11 +87,24 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<CustomApiResponse<?>> getOnePost(Long postId) {
-        Optional<Post> data = postRepository.findById(postId);
-        CustomApiResponse<Optional<Post>> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글 조회가 완료되었습니다");
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isEmpty()) {
+            CustomApiResponse<Object> responseBody = CustomApiResponse.createFailWithoutData(HttpStatus.NOT_FOUND.value(), "게시글이 없습니다.");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(responseBody);
+        }
+        Post post = optionalPost.get();
+        PostListDto.PostResponse data = PostListDto.PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .Content(post.getContent())
+                .postedUserName(post.getPostedUserName())
+                .updatedAt(post.getUpdatedAt().atStartOfDay())
+                .build();
+        CustomApiResponse<PostListDto.PostResponse> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글 조회가 완료되었습니다");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseBody);
-
     }
 }
