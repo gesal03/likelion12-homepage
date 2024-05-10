@@ -26,4 +26,9 @@ public class PostController {
             @PathVariable("postId") Long postId) {
         return postService.updatePost(req, postId);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<CustomApiResponse<?>> getAllPost() {
+        return postService.getAllPost();
+    }
 }

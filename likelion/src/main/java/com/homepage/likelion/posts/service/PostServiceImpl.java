@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,6 +59,15 @@ public class PostServiceImpl implements PostService {
         // ResponseBody 생성
         CustomApiResponse<PostUpdateDto.UpdatePost> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글이 수정되었습니다");
         // ResponseEntity 반환
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseBody);
+    }
+
+    @Override
+    public ResponseEntity<CustomApiResponse<?>> getAllPost() {
+        List<Post> data = postRepository.findAll();
+        CustomApiResponse<List<Post>> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글 전체 조회 완료되었습니다");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseBody);
