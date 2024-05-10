@@ -72,4 +72,14 @@ public class PostServiceImpl implements PostService {
                 .status(HttpStatus.OK)
                 .body(responseBody);
     }
+
+    @Override
+    public ResponseEntity<CustomApiResponse<?>> getOnePost(Long postId) {
+        Optional<Post> data = postRepository.findById(postId);
+        CustomApiResponse<Optional<Post>> responseBody = CustomApiResponse.createSuccess(HttpStatus.OK.value(), data, "게시글 조회가 완료되었습니다");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseBody);
+
+    }
 }

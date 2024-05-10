@@ -31,4 +31,9 @@ public class PostController {
     public ResponseEntity<CustomApiResponse<?>> getAllPost() {
         return postService.getAllPost();
     }
+    @GetMapping("/{postId}")
+    public ResponseEntity<CustomApiResponse<?>> getOnePost(
+            @PathVariable("postId") Long postId) {
+        return postService.getOnePost(postId);
+    }
 }

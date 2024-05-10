@@ -11,4 +11,7 @@ public interface PostService {
 
     ResponseEntity<CustomApiResponse<?>> getAllPost();
 
+    ResponseEntity<CustomApiResponse<?>> getOnePost(Long postId);
+
+
 }
